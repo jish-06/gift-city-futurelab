@@ -87,6 +87,7 @@ flowchart TD
 
     E --> L
     J --> L
+```
 
 ### Processing flow explained
 
