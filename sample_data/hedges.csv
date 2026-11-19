@@ -1,0 +1,3 @@
+contract_number,currency_pair,direction,notional_amount,remaining_amount,contract_rate,maturity_date,legal_entity,status
+FWD-0045,USD/INR,SELL_BASE,50000,50000,86.000000,2026-12-16,India Export Co.,OPEN
+FWD-0046,EUR/INR,SELL_BASE,20000,20000,92.000000,2026-12-28,India Export Co.,OPEN

@@ -1,0 +1,4 @@
+invoice_number,customer,legal_entity,currency,direction,original_amount,outstanding_amount,issue_date,due_date,status
+EXP-1042,Northstar Components Inc.,India Export Co.,USD,RECEIVABLE,50000,35000,2026-11-04,2026-12-04,OPEN
+EXP-1043,EuroMach GmbH,India Export Co.,EUR,RECEIVABLE,28000,28000,2026-11-12,2026-12-28,OPEN
+IMP-201,Alloy Supplies LLC,India Export Co.,USD,PAYABLE,12000,12000,2026-11-08,2026-12-01,OPEN

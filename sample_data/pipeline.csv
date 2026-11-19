@@ -1,0 +1,3 @@
+deal_name,customer,currency,amount,probability,expected_close_date,expected_payment_date,stage
+Q4 US machinery order,Northstar Components,USD,120000,0.75,2026-11-26,2027-01-25,NEGOTIATION
+European tooling supply,EuroMach,EUR,80000,0.45,2026-12-11,2027-02-14,PROPOSAL
