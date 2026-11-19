@@ -31,31 +31,32 @@ FXNexus aims to address these challenges through a unified, event-driven and exp
 ## 2. How FXNexus Works
 
 FXNexus follows an event-driven processing approach. Financial records and business events enter the platform, are normalised and stored, and are then processed by the exposure and reconciliation engines. The resulting analysis feeds treasury modules that generate recommendations for human review.
-
 ### System workflow
+
+The following diagram illustrates how FXNexus processes financial data and converts it into reviewed treasury decisions.
 
 ```mermaid
 flowchart TD
-    A["Business Data Sources<br/>Invoices · Payments · Cash Balances<br/>Hedge Contracts · Sales Pipeline"]
-    B["Data Ingestion Layer<br/>File Imports · API Connectors<br/>Business Events"]
-    C["Validation & Normalisation<br/>Currency · Amount · Entity<br/>Dates · Transaction References"]
-    D["Central Data Store<br/>SQLite / PostgreSQL"]
-    E["Event Processing Engine<br/>Invoice Changes · Payment Updates<br/>Cancellations · Date Changes"]
-    F["Exposure Calculation Engine<br/>Receivables · Payables<br/>Foreign-Currency Cash"]
-    G["Reconciliation & Risk Analysis<br/>Hedge Alignment · Over-Hedging<br/>Maturity Mismatches · Shadow Balances"]
+    A["Business Data Sources<br/>Invoices, Payments, Cash Balances,<br/>Hedge Contracts, Sales Pipeline"]
+    B["Data Ingestion<br/>File Imports, API Connectors,<br/>Business Events"]
+    C["Validation and Normalisation"]
+    D[("Central Database<br/>SQLite / PostgreSQL")]
+    E["Event Processing Engine"]
+    F["Exposure Calculation Engine"]
+    G["Reconciliation and Risk Analysis"]
 
     H["Treasury Intelligence Modules"]
     H1["Pipeline Exposure Forecasting"]
-    H2["Dynamic Hedge Adjustment Planning"]
+    H2["Dynamic Hedge Adjustment"]
     H3["Intercompany Netting"]
-    H4["Liquidity & Margin Stress Testing"]
+    H4["Liquidity and Margin Stress Testing"]
     H5["Working Capital Optimisation"]
     H6["Hedge Accounting Drafts"]
 
-    I["Recommendation Engine<br/>Evidence · Calculations<br/>Assumptions · Suggested Actions"]
-    J["Maker-Checker Approval Workflow<br/>Maker Submits · Checker Reviews"]
-    K["Simulated Action<br/>No Real Trade Execution"]
-    L["Audit Trail<br/>Events · Decisions · Actions"]
+    I["Evidence-Based Recommendations"]
+    J["Maker-Checker Approval"]
+    K["Simulated Action"]
+    L["Audit Trail"]
 
     A --> B
     B --> C
@@ -83,9 +84,9 @@ flowchart TD
     I --> J
     J --> K
     K --> L
+
     E --> L
     J --> L
-```
 
 ### Processing flow explained
 
