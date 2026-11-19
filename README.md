@@ -1,128 +1,393 @@
-# FXNexus — Event-driven FX exposure & treasury workflow MVP
+# FXNexus — Event-Driven FX Exposure & Treasury Workflow Platform
 
-FXNexus is a working, local-first prototype for exporters and mid-market businesses managing foreign-currency receivables, payables, cash balances and hedge records.
+**Developed for the GIFT City FutureLab Challenge 2026–27**
 
-It demonstrates a **headless treasury overlay**: ingest business events, maintain transaction state, calculate exposures, reconcile hedge records, surface actionable recommendations, and route proposals through maker-checker approval. It also includes the wider challenge differentiators as explicit, demoable modules: pre-invoice pipeline scenarios, dynamic roll/adjustment planning, shadow-balance detection, intercompany netting, liquidity/margin stress tests, working-capital-vs-hedge-cost comparison, and draft hedge-accounting documentation.
+FXNexus is an event-driven foreign exchange (FX) exposure management and treasury decision-support platform designed for exporters and mid-market businesses managing foreign-currency receivables, payables, cash balances and hedge contracts.
 
-> **Important prototype boundary:** FXNexus does not execute real derivatives, send trade instructions to a bank, make legal/accounting determinations, or provide investment advice. The execution adapter is simulation-only. Recommendations are decision support and require qualified review. Accounting outputs are drafts requiring professional validation.
+It demonstrates a **headless treasury overlay** that works alongside existing business systems. Rather than replacing an organisation's ERP, accounting or banking infrastructure, FXNexus aims to bring financial data together, track changes in underlying transactions, recalculate currency exposure, identify hedge mismatches and generate explainable recommendations.
 
-## Quick start (Windows PowerShell)
+The platform also explores advanced treasury capabilities, including pre-invoice pipeline exposure forecasting, dynamic hedge adjustment planning, shadow-balance reconciliation, intercompany netting, liquidity and margin stress testing, working-capital optimisation and draft hedge-accounting documentation.
 
-Requirements: Python 3.11+ and Node.js 22.12+ (the project pins Vite 8.3.8).
+> **Prototype boundary:** FXNexus is a decision-support prototype. It does not execute real derivatives, send trade instructions to banks, handle funds, make legal or accounting determinations, or provide investment advice. Its execution workflow is simulation-only. Recommendations require appropriate human and professional review.
+
+---
+
+## 1. The Problem
+
+Businesses involved in international trade are exposed to fluctuations in foreign exchange rates. Changes in exchange rates, payment dates, shipment schedules, invoice values and customer commitments can affect their expected cash flows.
+
+However, relevant financial information is often distributed across accounting software, spreadsheets, CRM platforms, banking records and hedge contracts.
+
+This fragmentation makes it difficult to maintain an accurate view of actual FX exposure and can result in:
+
+- Mismatched or excessive hedge positions.
+- Exposure changes going unnoticed after invoice or payment updates.
+- Foreign-currency balances being incorrectly treated as settled exposure.
+- Unexpected liquidity and margin pressure.
+- Limited visibility into potential exposure before an invoice is created.
+
+FXNexus aims to address these challenges through a unified, event-driven and explainable treasury workflow.
+
+## 2. How FXNexus Works
+
+FXNexus follows an event-driven processing approach. Financial records and business events enter the platform, are normalised and stored, and are then processed by the exposure and reconciliation engines. The resulting analysis feeds treasury modules that generate recommendations for human review.
+
+### System workflow
+
+```mermaid
+flowchart TD
+    A["Business Data Sources<br/>Invoices · Payments · Cash Balances<br/>Hedge Contracts · Sales Pipeline"]
+    B["Data Ingestion Layer<br/>File Imports · API Connectors<br/>Business Events"]
+    C["Validation & Normalisation<br/>Currency · Amount · Entity<br/>Dates · Transaction References"]
+    D["Central Data Store<br/>SQLite / PostgreSQL"]
+    E["Event Processing Engine<br/>Invoice Changes · Payment Updates<br/>Cancellations · Date Changes"]
+    F["Exposure Calculation Engine<br/>Receivables · Payables<br/>Foreign-Currency Cash"]
+    G["Reconciliation & Risk Analysis<br/>Hedge Alignment · Over-Hedging<br/>Maturity Mismatches · Shadow Balances"]
+
+    H["Treasury Intelligence Modules"]
+    H1["Pipeline Exposure Forecasting"]
+    H2["Dynamic Hedge Adjustment Planning"]
+    H3["Intercompany Netting"]
+    H4["Liquidity & Margin Stress Testing"]
+    H5["Working Capital Optimisation"]
+    H6["Hedge Accounting Drafts"]
+
+    I["Recommendation Engine<br/>Evidence · Calculations<br/>Assumptions · Suggested Actions"]
+    J["Maker-Checker Approval Workflow<br/>Maker Submits · Checker Reviews"]
+    K["Simulated Action<br/>No Real Trade Execution"]
+    L["Audit Trail<br/>Events · Decisions · Actions"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+
+    H --> H1
+    H --> H2
+    H --> H3
+    H --> H4
+    H --> H5
+    H --> H6
+
+    H1 --> I
+    H2 --> I
+    H3 --> I
+    H4 --> I
+    H5 --> I
+    H6 --> I
+
+    G --> I
+    I --> J
+    J --> K
+    K --> L
+    E --> L
+    J --> L
+```
+
+### Processing flow explained
+
+1. **Data ingestion:** Financial information enters through sample datasets, supported business events and available API connectors.
+2. **Validation and normalisation:** Records are checked and organised using fields such as currency, amount, transaction date, legal entity and transaction reference.
+3. **Event processing:** Changes such as partial payments, invoice amendments, cancellations and payment-date updates trigger reassessment.
+4. **Exposure calculation:** The platform evaluates foreign-currency receivables, payables and relevant cash balances.
+5. **Reconciliation:** Existing hedge records are compared against underlying exposures to identify mismatches, excessive hedge amounts and maturity differences.
+6. **Treasury analysis:** Additional modules evaluate pipeline exposure, hedge adjustments, netting opportunities, liquidity pressure and working-capital alternatives.
+7. **Recommendations:** The system generates suggested actions supported by calculations, source evidence and assumptions.
+8. **Approval and simulation:** A Maker submits a proposal and a Checker reviews it before an internal simulated action.
+9. **Audit trail:** Relevant events, decisions and actions are recorded for traceability.
+
+The current prototype uses deterministic rules and sample data for its demonstrations. The diagram represents the overall platform workflow, including capabilities at different stages of implementation.
+
+---
+
+## 3. Core Features
+
+| Module | Functionality |
+|---|---|
+| Overview Dashboard | Displays current exposure, receivables, payables, hedge coverage and alerts. |
+| Transactions | Manages invoice and payment records and supports transaction-event updates. |
+| Hedge Alignment | Identifies mismatches between hedge contracts and underlying exposures. |
+| Recommendations | Generates evidence-backed treasury recommendations. |
+| Maker-Checker Approvals | Routes proposed actions through a two-role approval workflow. |
+| Pipeline Forecasting | Estimates potential pre-invoice exposure using sales-deal probabilities. |
+| Dynamic Hedge Adjustment | Identifies maturity mismatches and prepares adjustment or roll proposals. |
+| Shadow Balance Reconciliation | Distinguishes foreign-currency receipts retained as cash from those converted into another currency. |
+| Intercompany Netting | Evaluates compatible reciprocal positions across group entities. |
+| Liquidity Stress Testing | Models cash-flow pressure under FX shocks and assumed margin calls. |
+| Working Capital Optimisation | Compares illustrative hedge economics with early-payment discounts and financing costs. |
+| Scenario Lab | Simulates FX movements, payment delays and invoice changes. |
+| Accounting Drafts | Generates draft hedge-accounting documentation for professional review. |
+| Audit Trail | Records supported events, decisions and simulated actions. |
+| Connections | Provides the available external integration configuration and testing interface. |
+
+---
+
+## 4. Technology Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React, TypeScript, Vite |
+| UI and Icons | Lucide icons, CSS |
+| Backend | Python, FastAPI, Pydantic |
+| Database | SQLite by default; PostgreSQL supported through `DATABASE_URL` |
+| ORM | SQLAlchemy |
+| Financial Calculations | Python `Decimal` and SQL `NUMERIC` |
+| API Documentation | FastAPI / Swagger UI |
+| External Data | Zoho Books read-only retrieval scaffold; Twelve Data reference-rate adapter |
+| Testing | Pytest |
+
+### Architecture principles
+
+- **Modular design:** Separate components for ingestion, calculations, reconciliation, recommendations and approvals.
+- **Event-driven processing:** Changes in underlying business transactions can trigger exposure reassessment.
+- **Explainability:** Recommendations include supporting evidence, assumptions and calculation details.
+- **Human oversight:** Proposed actions pass through a Maker-Checker workflow.
+- **Integration-first approach:** Designed to complement existing ERP, accounting, CRM and banking systems.
+- **Financial precision:** Backend calculations use decimal arithmetic instead of binary floating-point arithmetic.
+
+---
+
+## 5. Quick Start — Windows PowerShell
+
+### Requirements
+
+- Python 3.11+
+- Node.js 22.12+
+- npm
+
+### 1. Start the backend
+
+Open a terminal in the project directory:
 
 ```powershell
-# 1. Backend — no PowerShell script activation is required
 cd backend
-py -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-Copy-Item .env.example .env
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000
 
-# 2. Frontend — open a second terminal
-cd frontend
-npm.cmd install
+py -m venv .venv
+
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
 Copy-Item .env.example .env
+
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000
+```
+
+The backend will run at:
+
+`http://localhost:8000`
+
+### 2. Start the frontend
+
+Open a second terminal in the project directory:
+
+```powershell
+cd frontend
+
+npm.cmd install
+
+Copy-Item .env.example .env
+
 npm.cmd run dev
 ```
 
-Open http://localhost:5173. API docs: http://localhost:8000/docs. The frontend starts at the FXNexus sign-in page.
+The frontend will run at:
 
-**Local demo accounts** (also listed on the sign-in screen):
-- Maker: `maker@fxnexus.local` / `Maker-Demo-2026!`
-- Checker: `checker@fxnexus.local` / `Checker-Demo-2026!`
+`http://localhost:5173`
 
-Change these in `backend/.env` before sharing the project. This is a local prototype login, not production identity management. Sessions are held in backend memory and expire after the configured period.
+### 3. Open FXNexus
 
-The backend creates a local SQLite database and seeds a demo company on first start. No third-party API keys are required for the seeded demo.
+- Application: http://localhost:5173
+- Backend API: http://localhost:8000
+- API documentation: http://localhost:8000/docs
 
-## Demo flow
+The frontend opens at the FXNexus sign-in page.
 
-1. Open **Overview** and inspect current exposures and alerts.
-2. Open **Transactions**. Use the event simulator to record a partial payment and choose whether it was converted to INR or retained in USD.
-3. Open **Recommendations**. Inspect the generated evidence-backed mismatch.
-4. As Maker, create an action proposal and submit it for approval.
-5. Sign out, sign in as Checker, verify all four controls, and approve internally. The separate simulation never changes a real hedge or sends a bank order.
-6. Explore **Pipeline** soft-planning bands, **Hedge alignment** roll watch, **Shadow balances**, **Netting**, **Liquidity**, **Working capital**, **Scenario lab**, and **Accounting drafts**.
-7. Open **Connections** to test the Zoho read-only fetch and Twelve Data reference-rate adapter when you have configured credentials.
+### Local demo accounts
 
-## Architecture
+| Role | Email | Password |
+|---|---|---|
+| Maker | `maker@fxnexus.local` | `Maker-Demo-2026!` |
+| Checker | `checker@fxnexus.local` | `Checker-Demo-2026!` |
 
-- Frontend: React + TypeScript + Vite + Lucide icons; chart is rendered with a responsive CSS/SVG-free bar layout so it does not depend on chart-container measurement.
-- Backend: Python + FastAPI + Pydantic + SQLAlchemy.
-- Storage: SQLite by default; PostgreSQL/Supabase via `DATABASE_URL`.
-- Money: Python `Decimal` and SQL `NUMERIC`/decimal strings. Avoid JS floating point for financial calculations; frontend displays backend-calculated strings.
-- Integrations: Zoho Books read-only list-fetch scaffold and Twelve Data reference-rate adapter. OpenAI has a server-side key placeholder only; an LLM is not invoked. CRM and bank providers are not live-connected. Deterministic demo data works without credentials.
+These accounts are intended only for the local demonstration. Change the credentials in `backend/.env` before sharing the project.
 
-## Environment variables and keys
+The backend creates a local SQLite database and seeds a demo company on first start. No third-party API keys are required to run the seeded demonstration.
 
-See `backend/.env.example` and `frontend/.env.example`.
+---
 
-### Required to run locally
+## 6. Suggested Demo Workflow
 
-None. The sample-data mode works with no credentials.
+1. Sign in as Maker and open **Overview** to inspect the current exposure position and alerts.
+2. Open **Transactions** and use the event simulator to record a partial payment. Select whether the payment was converted into INR or retained in USD.
+3. Open **Recommendations** and inspect the resulting exposure and hedge mismatch analysis.
+4. Create an action proposal as Maker and submit it for approval.
+5. Sign out and sign in as Checker.
+6. Review the proposal, verify the required controls and approve it internally.
+7. Run the separate action simulation. This does not modify a real hedge contract or send an order to a bank.
+8. Explore the other modules: **Pipeline**, **Hedge Alignment**, **Shadow Balances**, **Netting**, **Liquidity**, **Working Capital**, **Scenario Lab**, **Accounting Drafts** and **Audit Trail**.
+9. Open **Connections** to test the available Zoho read-only fetch and Twelve Data reference-rate adapter after configuring the required credentials.
+
+---
+
+## 7. Environment Variables and Integrations
+
+See:
+
+- `backend/.env.example`
+- `frontend/.env.example`
+
+### Required credentials
+
+None. The sample-data demonstration works without external API credentials.
 
 ### Optional integrations
 
-| Variable | Obtain it from | Used for |
+| Variable | Where to obtain it | Purpose |
 |---|---|---|
-| `ZOHO_CLIENT_ID` | Zoho API Console → create Server-based application | OAuth client ID |
+| `ZOHO_CLIENT_ID` | Zoho API Console → Server-based application | OAuth client ID |
 | `ZOHO_CLIENT_SECRET` | Same Zoho application | OAuth client secret |
-| `ZOHO_REFRESH_TOKEN` | OAuth consent flow with `access_type=offline` and scopes below | Server-side token refresh |
-| `ZOHO_ORGANIZATION_ID` | Zoho Books organization settings / API response | Selects the Books organisation |
-| `ZOHO_ACCOUNTS_URL` | Use `https://accounts.zoho.in` for India DC | OAuth token endpoint base |
-| `ZOHO_API_BASE_URL` | Use `https://www.zohoapis.in/books/v3` for India DC | Books API base |
-| `TWELVE_DATA_API_KEY` | Twelve Data dashboard | Indicative FX reference rates; not executable quotes |
-| `OPENAI_API_KEY` | OpenAI API platform | Optional narrative explanation only; never calculations or trade decisions |
-| `OPENAI_MODEL` | Model available to your API project | Optional explanation model (default in code is configurable) |
-| `DATABASE_URL` | Supabase project → Connect → Transaction pooler/connection string | Optional hosted PostgreSQL |
+| `ZOHO_REFRESH_TOKEN` | Zoho OAuth consent flow | Server-side token refresh |
+| `ZOHO_ORGANIZATION_ID` | Zoho Books organisation settings or API response | Selects the Books organisation |
+| `ZOHO_ACCOUNTS_URL` | `https://accounts.zoho.in` for India DC | OAuth token endpoint |
+| `ZOHO_API_BASE_URL` | `https://www.zohoapis.in/books/v3` for India DC | Zoho Books API base |
+| `TWELVE_DATA_API_KEY` | Twelve Data dashboard | Indicative FX reference rates |
+| `OPENAI_API_KEY` | OpenAI API platform | Reserved optional narrative-explanation integration |
+| `OPENAI_MODEL` | Model available to the API project | Optional explanation model configuration |
+| `DATABASE_URL` | PostgreSQL provider connection settings | Optional hosted PostgreSQL database |
 
-Zoho scopes for this read-only prototype:
-`ZohoBooks.invoices.READ,ZohoBooks.customerpayments.READ`
+### Zoho Books scopes
 
-The backend currently expects an OAuth refresh token (use Zoho Self Client to generate a grant code, exchange it for a refresh token, then paste the refresh token into `.env`). The `ZOHO_REDIRECT_URI` setting is reserved for a future full server-based OAuth callback flow; no callback route is implemented in this starter. Never put Zoho client secrets, refresh tokens, OpenAI keys, Twelve Data keys, or Supabase secret keys in frontend variables. Do not commit `.env` files.
+The current read-only prototype uses:
 
-### Supabase note
+```text
+ZohoBooks.invoices.READ,ZohoBooks.customerpayments.READ
+```
 
-The MVP uses SQLAlchemy directly. If using Supabase PostgreSQL, set `DATABASE_URL` to the PostgreSQL connection string (prefer the pooler for hosted deployments), e.g. `postgresql+psycopg://postgres.<project-ref>:<password>@<pooler-host>:6543/postgres`. The app does not need Supabase browser keys for its current architecture. If you later add Supabase Auth/client access, use a publishable key in the browser and keep any secret key server-only.
+The backend expects an OAuth refresh token. A Zoho Self Client can be used to generate a grant code and exchange it for a refresh token.
 
-## What is implemented vs scaffolded
+The `ZOHO_REDIRECT_URI` setting is reserved for a future full server-based OAuth callback flow. A callback route is not currently implemented.
 
-| Capability | Status |
+**Security:** Never put Zoho client secrets, refresh tokens, OpenAI keys, Twelve Data keys or database secret credentials in frontend environment variables. Do not commit `.env` files to GitHub.
+
+### Supabase / PostgreSQL note
+
+The MVP uses SQLAlchemy directly. To use Supabase PostgreSQL, configure `DATABASE_URL` with a PostgreSQL connection string.
+
+For example:
+
+```text
+postgresql+psycopg://postgres.<project-ref>:<password>@<pooler-host>:6543/postgres
+```
+
+Prefer the appropriate connection pooler for hosted deployments. The current architecture does not require Supabase browser keys.
+
+---
+
+## 8. Implementation Status and Limitations
+
+The following table distinguishes working prototype functionality from integrations and capabilities that remain planned or incomplete.
+
+| Capability | Current Status |
 |---|---|
-| Invoice/payment/hedge demo data | Working |
+| Invoice, payment and hedge demo data | Working |
 | Event ingestion and idempotency | Working; includes invoice-date and mapped CRM-deal update event types |
-| Exposure recalculation and hedge mismatch detection | Working MVP rules |
-| Recommendations, evidence, action proposals | Working |
-| Maker-checker approvals and stale snapshot protection | Working local demo workflow with separate Maker/Checker logins; not production identity management |
-| Simulated hedge adjustment / roll proposal | Working maker-checker proposal and local simulation; no external order or real contract mutation |
-| Pipeline probability scenarios | Working model with 25/50/75% soft-planning coverage bands; signed/won stages move to 100% firm pre-invoice planning, lost/cancelled deals are excluded; not an automated trade |
-| FX/payment-delay/invoice-change scenario lab | Working illustrative USD/INR scenario endpoint and UI |
-| India-first corridor orientation | INR base model and currency-pair-aware records; no regulatory eligibility determination |
-| Shadow-balance / settlement reconciliation | Working demo ledger separates cash snapshots from payment movements, resolves retained/INR-converted/foreign-cross-converted/unknown treatments, carries supported foreign-currency conversions into destination-currency cash exposure using an explicit conversion rate, and flags unresolved records; no live GL/bank statement scanner |
-| Intercompany netting | Working illustrative calculation; requires reciprocal entity positions and a seven-day demo timing window |
-| Liquidity and margin stress test | Working simplified calculator with FX-linked receipts, payments, margin call, committed credit-line limit, drawn amount, undrawn capacity, utilisation and post-facility shortfall; cash snapshot is an initial input |
+| Exposure recalculation | Working MVP rules |
+| Hedge mismatch detection | Working MVP rules |
+| Recommendations and action proposals | Working |
+| Maker-Checker approvals | Working local demonstration with separate Maker and Checker accounts |
+| Stale snapshot protection | Working |
+| Simulated hedge adjustment / roll proposal | Working proposal and local simulation; no external execution |
+| Pipeline probability scenarios | Working illustrative model with probability-weighted exposure and soft-planning bands |
+| Scenario Lab | Working illustrative USD/INR scenario functionality |
+| Shadow-balance reconciliation | Working demo ledger with retained, converted and unresolved payment treatments |
+| Intercompany netting | Working illustrative calculation with reciprocal positions and a seven-day demo timing window |
+| Liquidity and margin stress testing | Working simplified calculator using assumed margin-call inputs and cash snapshots |
 | Working-capital vs hedge-cost comparison | Working illustrative calculator |
-| Ind AS 109 / IFRS 9 / ASC 815 draft memo | Template draft only; not a compliance opinion or journal-entry generator |
-| Zoho Books invoice/payment retrieval | OAuth refresh + read-only API fetch scaffold; fetched objects are not yet mapped/imported into local tables |
-| Twelve Data | Reference-rate adapter scaffold |
-| CRM / ERP connector targets | Headless integration design for Zoho, Tally, NetSuite, SAP, HubSpot and Salesforce; only Zoho Books read-only retrieval is scaffolded, CRM provider OAuth/webhooks and ERP imports are not connected |
-| OANDA / IBKR | Not integrated; intentionally no broker execution |
-| Bank APIs / AA / Setu | Not integrated; use explicit synthetic/imported cash snapshots and settlement events |
+| Hedge-accounting documentation | Draft template only; not a compliance opinion or journal-entry generator |
+| Zoho Books integration | OAuth refresh and read-only invoice/payment retrieval scaffold; fetched objects are not yet mapped into local tables |
+| Twelve Data integration | Reference-rate adapter scaffold; rates are not executable quotes |
+| CRM / ERP integrations | Integration architecture and connector targets; live provider integrations are not connected apart from the Zoho read-only retrieval scaffold |
+| Bank APIs / Account Aggregator | Not integrated |
+| OANDA / Interactive Brokers | Not integrated; no broker execution |
+| Real derivative execution | Not implemented |
 
-## Tests
+### Important interpretation notes
+
+- Pipeline exposure is a forecast, not a confirmed receivable.
+- A foreign-currency receipt retained in that currency can continue to carry FX exposure.
+- Economic netting calculations do not establish legal eligibility for settlement.
+- Liquidity stress tests use simplified assumptions and do not represent live bank margin calls.
+- Accounting drafts require review by qualified accounting professionals.
+- FX reference rates are indicative and must not be treated as executable market quotes.
+
+---
+
+## 9. Running Tests
+
+From the project directory:
 
 ```bash
 cd backend
 pytest
 ```
 
-## Authentication notes
+---
 
-The sign-in page uses two local demo accounts with environment-configured credentials. The backend issues expiring in-memory bearer sessions and enforces Maker-only proposal submission and Checker-only approval/simulation. This is useful for a local prototype walkthrough, but it is not a substitute for OIDC/Supabase Auth, MFA, persistent session revocation, multi-tenant role-based authorisation or production security review.
+## 10. Authentication and Security Notes
 
-## Production hardening still required
+The local sign-in page uses two demo accounts with environment-configured credentials.
 
-Before real company use: proper identity provider and MFA; tenant-level PostgreSQL row security; encrypted OAuth token vault; signed webhook verification; background queue/outbox; full audit immutability/WORM export; robust FX instrument eligibility and legal-entity rules; bank/custodian integrations; professional review of regulatory/accounting logic; security review and penetration testing. The demo auth uses configurable environment-based Maker/Checker accounts and in-memory tokens for local demonstration only.
+The backend issues expiring in-memory bearer sessions and enforces:
 
-### v0.3 usability fixes
-The audit trail now presents readable event summaries and keeps raw payloads behind an expandable technical-details section. Recommendation details show the financial calculation inputs/outputs separately from the SHA-256 trace identifier. Accounting drafts download as PDF files. The Connections page can test Zoho OAuth and discover accessible Books organisations before an organisation ID is configured; see `docs/API_KEYS.md` for required read-only scopes.
+- Maker-only proposal submission.
+- Checker-only approval and simulation.
+- Separate review and approval responsibilities.
+
+This is suitable for a local prototype walkthrough, not production identity management.
+
+Before real company deployment, additional security work would be required, including:
+
+- A proper identity provider and multi-factor authentication.
+- Tenant-level database access controls.
+- Secure storage of OAuth tokens and credentials.
+- Signed webhook verification.
+- Persistent session management and revocation.
+- More comprehensive audit retention and tamper-resistance.
+- Security assessment and penetration testing.
+
+---
+
+## 11. Future Development Roadmap
+
+FXNexus is designed to evolve from a local prototype into an integration-driven treasury intelligence platform.
+
+Potential future development areas include:
+
+1. **ERP and accounting integrations:** Expand beyond the current Zoho retrieval scaffold to systems such as Tally, NetSuite and SAP.
+2. **CRM integrations:** Connect platforms such as HubSpot and Salesforce to support earlier exposure forecasting.
+3. **Banking data connectivity:** Explore secure, consent-based access to relevant bank and cash-flow information.
+4. **Advanced forecasting:** Develop payment-delay and cash-flow forecasting using suitable historical data.
+5. **Optimisation engine:** Introduce more advanced hedge and liquidity optimisation where validated business requirements justify it.
+6. **Production security:** Implement enterprise-grade identity, tenant isolation, credential management and audit infrastructure.
+7. **Industry pilot testing:** Validate calculations and recommendations with exporters and treasury professionals.
+8. **Regulatory and accounting review:** Obtain specialist review before expanding into regulated execution workflows or production accounting functionality.
+
+Any future derivative execution capability would need to operate through appropriately authorised financial institutions and comply with applicable regulatory requirements.
+
+---
+
+## 12. Project Team
+
+FXNexus was developed as a team project for the **GIFT City FutureLab Challenge 2026–27**.
+
+| Team Member | Role and Contribution |
+|---|---|
+| **Jiya Shah** — Team Leader | Backend development, core logic and system integration |
+| **Tanisha** | Frontend development, UI and research analysis |
+| **Namrata** | Frontend development, financial analysis and documentation |
+
+---
+
+**FXNexus — Connecting financial events to explainable treasury decisions.**
